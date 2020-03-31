@@ -1911,7 +1911,14 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             this.scope.addEventListener('fetch', (event) => this.onFetch(event));
             this.scope.addEventListener('message', (event) => this.onMessage(event));
             this.scope.addEventListener('push', (event) => this.onPush(event));
-            this.scope.addEventListener('notificationclick', (event) => this.onClick(event));
+            self.addEventListener('notificationclick', (event) => {
+                console.log("This is custom service worker notificationclick method.");
+                console.log('Notification details: ', event.notification);
+                // Write the code to open
+                if (clients.openWindow && event.notification.data.url) {
+                    event.waitUntil(clients.openWindow(event.notification.data.url));
+                }
+            });
             // The debugger generates debug pages in response to debugging requests.
             this.debugger = new DebugHandler(this, this.adapter);
             // The IdleScheduler will execute idle tasks after a given delay.
