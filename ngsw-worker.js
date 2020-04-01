@@ -1911,7 +1911,26 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             this.scope.addEventListener('fetch', (event) => this.onFetch(event));
             this.scope.addEventListener('message', (event) => this.onMessage(event));
             this.scope.addEventListener('push', (event) => this.onPush(event));
-            this.scope.addEventListener('notificationclick', (event) => this.onClick(event));
+            this.scope.addEventListener('notificationclick', (event) => {
+                // this.onClick(event)
+                console.log('On notification click: ', event.notification.tag);
+                event.notification.close();
+
+                // This looks to see if the current is already open and
+                // focuses if it is
+                event.waitUntil(
+                    clients
+                        .matchAll({
+                            type: 'window'
+                        })
+                        .then(clientList => {
+                            for (let i = 0; i < clientList.length; i++) {
+                                const client = clientList[i];
+                                if (client.url === '/' && 'focus' in client) return client.focus();
+                            }
+                            if (clients.openWindow) return clients.openWindow('/');
+                        }));
+            });
             // The debugger generates debug pages in response to debugging requests.
             this.debugger = new DebugHandler(this, this.adapter);
             // The IdleScheduler will execute idle tasks after a given delay.
