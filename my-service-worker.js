@@ -1,7 +1,7 @@
 importScripts('./ngsw-worker.js');
 
 self.addEventListener('notificationclick', (event) => {
-
+    let that = this;
     event.waitUntil(async function () {
         const allClients = await clients.matchAll({
             includeUncontrolled: true
@@ -27,6 +27,6 @@ self.addEventListener('notificationclick', (event) => {
         }
 
         // Message the client:
-        self.onClick(event);
+        that.onClick(event);
     }());
 });
