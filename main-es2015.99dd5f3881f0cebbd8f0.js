@@ -9166,7 +9166,7 @@
               console.log("Received notification: ", e),
                 this.router.navigate(["home"]);
             });
-            this.swPush.message.subscribe(e => {
+            this.swPush.messages.subscribe(e => {
                 console.log("Received message: ", e),
                   this.router.navigate(["home"]);
               });
