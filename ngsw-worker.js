@@ -1913,23 +1913,34 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             this.scope.addEventListener('push', (event) => this.onPush(event));
             this.scope.addEventListener('notificationclick', (event) => {
                 // this.onClick(event)
-                console.log('On notification click: ', event.notification.tag);
-                event.notification.close();
-
-                // This looks to see if the current is already open and
-                // focuses if it is
-                event.waitUntil(
-                    clients
-                        .matchAll({
-                            type: 'window'
-                        })
-                        .then(clientList => {
-                            for (let i = 0; i < clientList.length; i++) {
-                                const client = clientList[i];
-                                if (client.url === '/' && 'focus' in client) return client.focus();
-                            }
-                            if (clients.openWindow) return clients.openWindow('/');
-                        }));
+                event.waitUntil(async function() {
+                    const allClients = await clients.matchAll({
+                      includeUncontrolled: true
+                    });
+                
+                    let chatClient;
+                
+                    // Let's see if we already have a chat window open:
+                    for (const client of allClients) {
+                      const url = new URL(client.url);
+                
+                      if (url.pathname == '/sample/') {
+                        // Excellent, let's use it!
+                        client.focus();
+                        chatClient = client;
+                        break;
+                      }
+                    }
+                
+                    // If we didn't find an existing chat window,
+                    // open a new one:
+                    if (!chatClient) {
+                      chatClient = await clients.openWindow('/sample/');
+                    }
+                
+                    // Message the client:
+                    chatClient.postMessage("New chat messages!");
+                  }());
             });
             // The debugger generates debug pages in response to debugging requests.
             this.debugger = new DebugHandler(this, this.adapter);
