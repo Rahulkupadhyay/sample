@@ -1912,14 +1912,13 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             this.scope.addEventListener('message', (event) => this.onMessage(event));
             this.scope.addEventListener('push', (event) => this.onPush(event));
             this.scope.addEventListener('notificationclick', (event) => {
-                // this.onClick(event)
+                let self = this;
                 event.waitUntil(async function() {
                     const allClients = await clients.matchAll({
                       includeUncontrolled: true
                     });
                 
-                    let chatClient;
-                
+                    let appClient;
                     // Let's see if we already have a chat window open:
                     for (const client of allClients) {
                       const url = new URL(client.url);
@@ -1927,19 +1926,18 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                       if (url.pathname == '/sample/') {
                         // Excellent, let's use it!
                         client.focus();
-                        chatClient = client;
+                        appClient = client;
                         break;
                       }
                     }
                 
                     // If we didn't find an existing chat window,
                     // open a new one:
-                    if (!chatClient) {
-                      chatClient = await clients.openWindow('/sample/');
+                    if (!appClient) {
+                      appClient = await clients.openWindow('/sample/');
                     }
                 
-                    // Message the client:
-                    chatClient.postMessage("New chat messages!");
+                    self.onClick(event);
                   }());
             });
             // The debugger generates debug pages in response to debugging requests.
