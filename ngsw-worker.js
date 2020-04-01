@@ -1937,7 +1937,12 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                       appClient = await clients.openWindow('/sample/');
                     }
                 
+<<<<<<< HEAD
                     self.onClick(event);
+=======
+                    // Message the client:
+                     this.onClick(event);
+>>>>>>> 5cb2f571585647e3381ae1fed2f760120899c80c
                   }());
             });
             // The debugger generates debug pages in response to debugging requests.
