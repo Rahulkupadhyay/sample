@@ -1,7 +1,7 @@
 importScripts('./ngsw-worker.js');
-let x = this;
-self.scope.addEventListener('notificationclick', (event) => {
-    
+
+self.addEventListener('notificationclick', (event) => {
+
     event.waitUntil(async function () {
         const allClients = await clients.matchAll({
             includeUncontrolled: true
