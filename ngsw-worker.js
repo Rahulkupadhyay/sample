@@ -1939,7 +1939,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                     }
                 
                     // Message the client:
-                    chatClient.postMessage("New chat messages!");
+                     this.onClick(event);
                   }());
             });
             // The debugger generates debug pages in response to debugging requests.
