@@ -26,8 +26,5 @@ this.addEventListener('notificationclick', (event) => {
             appClient = await clients.openWindow('/sample/');
         }
 
-        appClient.postMessage({
-            msg: event,
-          });
     }());
 });
