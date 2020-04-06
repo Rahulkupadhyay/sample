@@ -12,7 +12,7 @@ this.addEventListener('notificationclick', (event) => {
         for (const client of allClients) {
             const url = new URL(client.url);
 
-            if (url.pathname == '/sample/') {
+            if (url.pathname == '/') {
                 // Excellent, let's use it!
                 client.focus();
                 appClient = client;
@@ -23,7 +23,7 @@ this.addEventListener('notificationclick', (event) => {
         // If we didn't find an existing chat window,
         // open a new one:
         if (!appClient) {
-            appClient = await clients.openWindow('/sample/');
+            appClient = await clients.openWindow('/');
         }
     }());
 });
